@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
+<h1>Создание заявки</h1>
     <form action={{ route('request-form') }} method="post" enctype="multipart/form-data">
     @csrf
         <div class="form-group">
