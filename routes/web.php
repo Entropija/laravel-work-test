@@ -33,6 +33,3 @@ Route::group(['middleware' => 'manager'], function () {
     Route::get('/manager', 'HomeController@homeManager')->name('homeManager');
     Route::get('/manager/request/all', 'RequestController@allData')->name('request-data-manager');
 });
-
-
-

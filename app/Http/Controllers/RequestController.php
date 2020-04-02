@@ -39,6 +39,7 @@ class RequestController extends Controller
             $request->url_file = null;
         }
         $request->save();
+        app('App\Http\Controllers\MailController')->send($request);
         return redirect()->route('homeUser')->with('success', "Заявка отправлена");
     }
 
