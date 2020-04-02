@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,25 @@ class HomeController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->is_manager){
+            return redirect()->route('homeManager');
+        } else {
+            return redirect()->route('homeUser'); 
+        }
+    }
+
+    public function homeUser()
+    {
+        
         return view('home');
     }
+
+    public function homeManager()
+    {
+        
+        return view('manager');
+    }
+
+
 }
+

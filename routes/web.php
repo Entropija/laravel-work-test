@@ -19,6 +19,8 @@ Auth::routes();
 
 Route::group(["middleware" => 'auth'], function(){
     Route::get('/', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@homeUser')->name('homeUser');
+    
     Route::get('/request', 'RequestController@newRequest')->name('request');
     Route::post('/request/submit', 'RequestController@submit')->name('request-form');
     Route::get('/request/all', 'RequestController@allDataUser')->name('request-data');
@@ -26,4 +28,10 @@ Route::group(["middleware" => 'auth'], function(){
     Route::post('/request/all/{id}/update', 'RequestController@updateSubmit')->name('request-update-submit');
     
 });
+
+Route::group(['middleware' => 'manager'], function () {
+    Route::get('/manager', 'HomeController@homeManager')->name('homeManager');
+});
+
+
 
