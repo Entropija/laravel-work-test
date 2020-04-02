@@ -5,7 +5,7 @@
     <ul class="nav flex-column">
 
     <li class="nav-item">
-        <a class="nav-link" href="{{route('request-data')}}">Все заявки</a>
+        <a class="nav-link" href="{{route('request-data-manager')}}">Все заявки</a>
     </li>
     
     </ul>

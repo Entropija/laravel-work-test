@@ -12,7 +12,6 @@ class RequestController extends Controller
 {
     public function newRequest()
     {
-        
         return view('newRequest');
     }
 
@@ -57,7 +56,14 @@ class RequestController extends Controller
             $request->url_file = null;
         }
         $request->save();
-        return redirect()->route('home')->with('success', "Заявка обновлена");
+        return redirect()->route('homeUser')->with('success', "Заявка обновлена");
+    }
+
+    public function  updateSubmitManager($id, CreateRequest $req){
+        $request  = RequestModel::find($id);
+        $request->message_manager = $req->input('message');
+        $request->save();
+        return redirect()->route('homeManager')->with('success', "Добавлен ответ на заявку");
     }
 
     public function allDataUser(){
@@ -72,8 +78,21 @@ class RequestController extends Controller
 
 
     public function updateRequest($id){
-        $request = new RequestModel;
-        return view('updateRequest', ['data' => $request->find($id)]);
+        $request = RequestModel::find($id);
+        
+        if(Auth::user()->is_manager == 1){
+            return redirect()->route('request-update-manager', $id);
+        }
+        return view('updateRequest', ['data' => $request]);
+    }
+
+    public function updateRequestManager($id){
+        $request = RequestModel::find($id);
+        if($request->status == 0){
+            $request->status = 1;
+        }
+        $request->save();
+        return view('updateRequestManager', ['data' => $request]);
     }
 
     public function close($id){
@@ -90,8 +109,20 @@ class RequestController extends Controller
                 app('App\Http\Controllers\MailController')->send($request);
                 
             }
+        if (Auth::user()->is_manager){
+            return redirect()->route('request-data-manager');
+        } 
         return redirect()->route('request-data');
     }
+
+    public function  accept($id, CreateRequest $req){
+        $request  = RequestModel::find($id);
+        $request->status = 2;
+        $request->save();
+        return redirect()->route('request-data-manager')->with('success', "Заявка принята");
+    }
+
+
 
        
 }

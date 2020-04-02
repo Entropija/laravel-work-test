@@ -38,7 +38,6 @@ class HomeController extends Controller
 
     public function homeManager()
     {
-        
         return view('manager');
     }
 
