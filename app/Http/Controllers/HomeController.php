@@ -33,7 +33,6 @@ class HomeController extends Controller
 
     public function homeUser()
     {
-        
         return view('home');
     }
 

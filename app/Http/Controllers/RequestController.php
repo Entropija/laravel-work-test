@@ -17,6 +17,13 @@ class RequestController extends Controller
     }
 
     public function  submit(CreateRequest $req){
+        $today = date("Y-m-d");  
+        $reqbool = RequestModel::where('user_id', Auth::user()->id)->whereDate('created_at', $today )->first();
+        if (isset($reqbool)){
+
+           return redirect()->route('homeUser')->with('warning', 'Вы сегодня уже создавали заявку');
+        }
+        session(['warning' => '']);
         $request  = new RequestModel();
         $request->status = 0;
         $request->user_id = Auth::user()->id;
@@ -32,7 +39,7 @@ class RequestController extends Controller
             $request->url_file = null;
         }
         $request->save();
-        return redirect()->route('home')->with('success', "Заявка отправлена");
+        return redirect()->route('homeUser')->with('success', "Заявка отправлена");
     }
 
     public function  updateSubmit($id, CreateRequest $req){
@@ -56,6 +63,12 @@ class RequestController extends Controller
         $request = RequestModel::where('user_id', Auth::user()->id)->get();
         return view('allRequests', ['data' => $request]);
     }
+
+    public function allData(){
+        $request = RequestModel::all();
+        return view('allRequests', ['data' => $request]);
+    }
+
 
     public function updateRequest($id){
         $request = new RequestModel;
