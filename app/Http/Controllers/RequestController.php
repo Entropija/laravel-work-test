@@ -76,5 +76,23 @@ class RequestController extends Controller
         return view('updateRequest', ['data' => $request->find($id)]);
     }
 
+    public function close($id){
+        $request = RequestModel::find($id);
+
+      //  dd($request);
+        if (
+            isset($request)  && 
+            (
+                ($request->user_id == Auth::user()->id) ||
+                ($request->is_manager == 1)
+            )
+            ){
+                $request->status = 3;
+                $request->save();
+                
+            }
+        return redirect()->route('request-data');
+    }
+
        
 }

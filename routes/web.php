@@ -26,6 +26,7 @@ Route::group(["middleware" => 'auth'], function(){
     Route::get('/request/all', 'RequestController@allDataUser')->name('request-data');
     Route::get('/request/all/{id}/update', 'RequestController@updateRequest')->name('request-update');
     Route::post('/request/all/{id}/update', 'RequestController@updateSubmit')->name('request-update-submit');
+    Route::get('/request/all/{id}/close', 'RequestController@close')->name('close');
     
 });
 
