@@ -78,8 +78,6 @@ class RequestController extends Controller
 
     public function close($id){
         $request = RequestModel::find($id);
-
-      //  dd($request);
         if (
             isset($request)  && 
             (
@@ -89,6 +87,7 @@ class RequestController extends Controller
             ){
                 $request->status = 3;
                 $request->save();
+                app('App\Http\Controllers\MailController')->send($request);
                 
             }
         return redirect()->route('request-data');

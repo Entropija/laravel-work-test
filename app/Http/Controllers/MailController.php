@@ -15,8 +15,13 @@ class MailController extends Controller
             $fileURLFull = $_SERVER['DOCUMENT_ROOT'] . '/storage/' . $file;
         }
 
-        Mail::send('mail', compact('mess'), function($message) use ($fileURLFull ){
-            $message->to('av.fedorova@mail.ru', 'ManagerSystem')->subject('Новая заявка');
+        Mail::send('mail', compact('mess'), function($message) use ($fileURLFull, $mess){
+            if($mess->status == 0){
+                $subject = "Новая заявка";
+            } else {
+                $subject = "Заявка обновлена, статус - " . $mess->getStatus();
+            }
+            $message->to('av.fedorova@mail.ru', 'ManagerSystem')->subject($subject);
             $message->from('portal@request.com', 'Система управления заявками');
             if(isset($fileURLFull)){
                 $message->attach($fileURLFull);   
