@@ -26,13 +26,14 @@ Route::group(["middleware" => 'auth'], function(){
     Route::get('/request/all/{id}/update', 'RequestController@updateRequest')->name('request-update');
     Route::post('/request/all/{id}/update', 'RequestController@updateSubmit')->name('request-update-submit');
     Route::get('/request/all/{id}/close', 'RequestController@close')->name('close');
-    
+
+    Route::group(['middleware' => 'manager'], function () {
+        Route::get('/manager', 'HomeController@homeManager')->name('homeManager');
+        Route::get('/manager/request/all', 'RequestController@allData')->name('request-data-manager');
+        Route::get('/manager/request/all/{id}/update', 'RequestController@updateRequestManager')->name('request-update-manager');
+        Route::post('/manager/request/all/{id}/update', 'RequestController@updateSubmitManager')->name('request-update-manager-submit');
+        Route::get('/manager/request/all/{id}/accept', 'RequestController@accept')->name('accept');   
+    });
 });
 
-Route::group(['middleware' => 'manager'], function () {
-    Route::get('/manager', 'HomeController@homeManager')->name('homeManager');
-    Route::get('/manager/request/all', 'RequestController@allData')->name('request-data-manager');
-    Route::get('/manager/request/all/{id}/update', 'RequestController@updateRequestManager')->name('request-update-manager');
-    Route::post('/manager/request/all/{id}/update', 'RequestController@updateSubmitManager')->name('request-update-manager-submit');
-    Route::get('/manager/request/all/{id}/accept', 'RequestController@accept')->name('accept');   
-});
+

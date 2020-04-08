@@ -16,7 +16,9 @@ class Manager
      */
     public function handle($request, Closure $next)
     {
-        if ( Auth::check() && Auth::user()->is_manager ) 
+        $user = Auth::user();
+        
+        if ($user->isManager()) 
         {
             return $next($request); 
         }

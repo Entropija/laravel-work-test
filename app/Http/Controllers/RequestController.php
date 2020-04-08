@@ -16,14 +16,12 @@ class RequestController extends Controller
     }
 
     public function  submit(CreateRequest $req){
+        $request  = new RequestModel();
         $today = date("Y-m-d");  
-        $reqbool = RequestModel::where('user_id', Auth::user()->id)->whereDate('created_at', $today )->first();
+        $reqbool = $request->where('user_id', Auth::user()->id)->whereDate('created_at', $today )->first();
         if (isset($reqbool)){
-
            return redirect()->route('homeUser')->with('warning', 'Вы сегодня уже создавали заявку');
         }
-        session(['warning' => '']);
-        $request  = new RequestModel();
         $request->status = 0;
         $request->user_id = Auth::user()->id;
         $request->title = $req->input('title');
@@ -76,11 +74,10 @@ class RequestController extends Controller
         return view('allRequests', ['data' => $request]);
     }
 
-
     public function updateRequest($id){
         $request = RequestModel::find($id);
         
-        if(Auth::user()->is_manager == 1){
+        if(Auth::user()->isManager()){
             return redirect()->route('request-update-manager', $id);
         }
         return view('updateRequest', ['data' => $request]);
@@ -98,18 +95,18 @@ class RequestController extends Controller
     public function close($id){
         $request = RequestModel::find($id);
         if (
-            isset($request)  && 
-            (
-                ($request->user_id == Auth::user()->id) ||
-                ($request->is_manager == 1)
-            )
+                isset($request)  && 
+                (
+                    ($request->user_id == Auth::user()->id) ||
+                    $request->isManager()
+                )
             ){
                 $request->status = 3;
                 $request->save();
                 app('App\Http\Controllers\MailController')->send($request);
                 
             }
-        if (Auth::user()->is_manager){
+        if (Auth::user()->isManager()){
             return redirect()->route('request-data-manager');
         } 
         return redirect()->route('request-data');
